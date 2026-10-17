@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NGỌC HUYỀN — The Universe I Call You</title>
+<meta name="theme-color" content="#08060B">
+<!-- Font ngoài là tùy chọn: mất mạng thì tự dùng font dự phòng -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Be+Vietnam+Pro:wght@300;400;500&family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--ob:#08060B;--pl:#1C1025;--bu:#4A1735;--rose:#EBA1C2;--ch:#F8DDE7;--st:#FFF6FB;--am:#9D70CE;--gold:#E6CDA3;
+--disp:"Cormorant Garamond",Georgia,"Times New Roman",serif;--sans:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--hand:"Dancing Script","Segoe Script","Brush Script MT",cursive}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--ob);color:var(--st);font:300 clamp(16px,1vw + 12px,18px)/1.8 var(--sans);overflow-x:hidden;min-height:100svh}
+body.noscroll{overflow:hidden}
+[hidden]{display:none!important}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#dim{position:fixed;inset:0;background:#000;opacity:0;pointer-events:none;z-index:40;transition:opacity .45s}#dim.on{opacity:.55}
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--rose),var(--am));z-index:45}
+.disp{font-family:var(--disp);font-weight:600;letter-spacing:.06em}
+.hand{font-family:var(--hand);font-weight:500}
+.big{font:italic 500 clamp(1.9rem,5.6vw,3.7rem)/1.25 var(--disp);max-width:20ch;color:var(--st)}
+.lead{font-family:var(--disp);font-style:italic;font-size:clamp(1.2rem,3vw,1.7rem);color:var(--ch);max-width:30ch}
+.para{max-width:36rem;color:var(--ch)}.small{font-size:.85rem;opacity:.75}
+.btn{font:500 1rem var(--sans);color:#1C1025;background:linear-gradient(120deg,var(--rose),var(--am));border:1px solid rgba(255,246,251,.55);border-radius:99px;padding:.9rem 1.7rem;min-height:48px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 10px 34px rgba(157,112,206,.35);transition:transform .25s,box-shadow .25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(235,161,194,.45)}.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--ch);border-color:rgba(235,161,194,.5);box-shadow:none}
+.btn.big2{font-size:clamp(1rem,3.6vw,1.2rem);padding:1.1rem 2rem;max-width:92vw;text-align:center}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.rv{opacity:0;transform:translateY(26px);filter:blur(8px);transition:opacity 1.3s,transform 1.3s,filter 1.3s;transition-delay:var(--d,0s)}.rv.in{opacity:1;transform:none;filter:none}
+@keyframes rise{from{opacity:0;filter:blur(12px);transform:translateY(16px);letter-spacing:.3em}to{opacity:1;filter:none;transform:none}}
+/* hoa hồng vector */
+.rose{display:block;aspect-ratio:1}.rose svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 16px rgba(235,161,194,.4));animation:breathe 5s ease-in-out infinite alternate}
+@keyframes breathe{to{filter:drop-shadow(0 0 30px rgba(235,161,194,.7))}}
+.pt{transform-box:view-box;transform-origin:100px 100px;transform:scale(.15);opacity:.2;transition:transform 1.7s cubic-bezier(.2,.8,.2,1) var(--i),opacity 1.7s var(--i)}
+.rose.open .pt{transform:scale(1);opacity:1}
+/* chương 0 (nền trong suốt để thấy sao/hạt phía sau) */
+#intro{position:fixed;inset:0;z-index:20;overflow-y:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;text-align:center;padding:max(20px,env(safe-area-inset-top)) 6vw max(20px,env(safe-area-inset-bottom));background:radial-gradient(ellipse at 50% 38%,rgba(157,112,206,.28),transparent 60%),radial-gradient(ellipse at 50% 100%,rgba(74,23,53,.8),transparent 60%);transition:opacity 1.2s}
+#intro.gone{opacity:0;pointer-events:none}
+#intro>*{animation:rise 1.8s both;animation-delay:var(--d,0s)}
+#intro h1{font-size:clamp(2.3rem,10.5vw,6rem);line-height:1.05;color:var(--st);animation-duration:2.4s}
+#intro .sub{font:italic 500 clamp(1.1rem,3.4vw,1.5rem)/1.4 var(--disp);color:var(--ch);max-width:26ch}
+.date{letter-spacing:.4em;font-size:.8rem;color:var(--gold)}
+.stage{position:relative;width:min(62vw,250px);aspect-ratio:1;margin:.6rem 0}
+.env{position:absolute;left:-12%;right:-12%;bottom:0;height:58%;background:linear-gradient(160deg,#2a1030,var(--bu));border:1px solid rgba(235,161,194,.35);border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 50px rgba(157,112,206,.2)}
+.flap{position:absolute;inset:0 0 auto;height:100%;background:linear-gradient(#5a1d44,#3a1430);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform 1s .2s}
+.env.open .flap{transform:rotateX(180deg)}
+.seal{position:absolute;left:50%;top:78%;translate:-50% -50%;width:34px;height:34px;border-radius:50%;background:#7a2150;color:var(--rose);display:grid;place-items:center;font-style:normal;box-shadow:0 0 18px rgba(235,161,194,.5);transition:opacity .6s}.env.open .seal{opacity:0}
+.stage .rose{position:absolute;left:12%;right:12%;top:-14%}
+/* các chương (nền bán trong suốt) */
+main{position:relative;z-index:1}
+.ch{min-height:100svh;padding:14vh 7vw;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:1.6rem;position:relative}
+.c1{background:radial-gradient(ellipse at 50% 30%,rgba(157,112,206,.22),transparent 60%),linear-gradient(rgba(8,6,11,0),rgba(28,16,37,.65))}
+.c2{padding:8vh 5vw 12vh;background:radial-gradient(ellipse at 50% 50%,rgba(74,23,53,.6),transparent 70%),linear-gradient(rgba(28,16,37,.65),rgba(8,6,11,0))}
+.c3{background:radial-gradient(ellipse at 50% 72%,rgba(230,205,163,.16),transparent 55%),linear-gradient(rgba(8,6,11,0),rgba(74,23,53,.7) 40%,rgba(42,16,48,.7) 78%,rgba(8,6,11,0))}
+.c4{background:linear-gradient(transparent,rgba(28,16,37,.6) 50%,transparent)}
+.c5{background:radial-gradient(ellipse at 15% 30%,rgba(157,112,206,.16),transparent 55%)}
+.c6{background:radial-gradient(ellipse at 50% 50%,rgba(157,112,206,.22),rgba(28,16,37,.6) 65%,transparent)}
+.c7{background:radial-gradient(ellipse at 50% 40%,rgba(235,161,194,.1),transparent 60%)}
+.c9{background:radial-gradient(ellipse at 50% 60%,rgba(74,23,53,.6),transparent 75%)}
+.orb{position:relative;width:min(80vw,340px);aspect-ratio:1;display:grid;place-items:center}
+.orb svg{position:absolute;inset:0;width:100%;height:100%;animation:spin 70s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.orb .name{font-size:clamp(2rem,8.5vw,3.2rem);position:relative;text-align:center;line-height:1.1}
+/* thư (rất dài: mỗi đoạn hiện khi cuộn tới) */
+.paper{width:min(100%,660px);padding:clamp(1.6rem,5vw,3.2rem);background:radial-gradient(circle at 15% 0,#fff8fb,transparent 60%),repeating-linear-gradient(0deg,rgba(0,0,0,.015) 0 1px,transparent 1px 3px),linear-gradient(160deg,#FBE8F0,#F2D3E2);color:#3a1830;border-radius:4px;text-align:left;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 6px rgba(248,221,231,.07);position:relative}
+.paper h2{font-size:clamp(1.6rem,6vw,2.3rem);color:#7a2a58;margin-bottom:1rem;line-height:1.3}
+.paper p{margin:0 0 1.1em;font-weight:400;line-height:1.85}
+#letterBody p{opacity:0;filter:blur(6px);transform:translateY(8px);transition:opacity 1s,filter 1s,transform 1s}#letterBody p.in{opacity:1;filter:none;transform:none}
+#letterBody p.tag{font:italic 500 1.2rem/1.5 var(--disp);color:#7a2a58}
+#letterBody p.gr{font:500 1.6rem var(--hand);color:#7a2a58}
+#letterBody p.fin{font-style:italic;color:#7a2a58;margin-bottom:.3em}
+.sign{display:flex;align-items:center;gap:.8rem;justify-content:flex-end;font-size:1.8rem;color:#7a2a58;opacity:0;transition:opacity 1.2s;margin-top:1.4rem}.done .sign{opacity:1}
+.stamp{width:34px;height:34px;border-radius:50%;background:#9c3f78;color:#FBE8F0;display:grid;place-items:center;font-size:.9rem;font-style:normal;transform:rotate(-12deg)}
+.fp{position:absolute;right:1.2rem;bottom:4.5rem;width:16px;height:24px;border-radius:50% 0;background:var(--rose);opacity:0}.done .fp{animation:fall 3.5s ease-in forwards}
+@keyframes fall{0%{opacity:.9;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(-30px,90px) rotate(200deg)}}
+/* vườn */
+.rosebtn{background:none;border:0;cursor:pointer;width:min(72vw,300px);border-radius:50%}
+.wish{font:italic 500 clamp(1.2rem,3.4vw,1.7rem)/1.5 var(--disp);max-width:30ch;opacity:0;transition:opacity 2s 1s}.wish.in{opacity:1}.wish p,.secmsg p{margin:0}
+.bouquet{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:2rem;align-items:center;max-width:860px;margin-top:3rem;text-align:left}
+.bouquet h3{font-size:clamp(1.7rem,5vw,2.3rem);color:var(--rose);margin-bottom:.8rem;line-height:1.2}.bouquet p{margin-bottom:.9em;color:var(--ch)}
+.frame{aspect-ratio:3/4;padding:10px;background:rgba(248,221,231,.08);border:1px solid rgba(248,221,231,.3);rotate:-2deg;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.frame .media{padding:0;border:0;height:100%}.frame .rose{width:80%;margin:auto}
+/* album (N ảnh theo CONFIG, bố cục lặp theo chu kỳ 5) */
+.gal{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(.8rem,2vw,1.6rem);width:min(100%,1000px)}
+.ph{border:0;background:none;color:inherit;font:inherit;cursor:pointer;padding:0;position:relative;display:block;text-align:left;min-width:0}
+.f0{grid-column:1/5;aspect-ratio:4/3;rotate:-1deg}.f1{grid-column:5/7;aspect-ratio:3/4;margin-top:3rem;rotate:1.5deg}.f2{grid-column:1/3;aspect-ratio:3/4;rotate:1deg}.f3{grid-column:3/7;aspect-ratio:16/10;margin-top:-1.5rem;rotate:-1.2deg}.f4{grid-column:2/6;aspect-ratio:16/9;rotate:.8deg}
+.media{width:100%;height:100%;overflow:hidden;padding:6px;border:1px solid rgba(248,221,231,.28);background:rgba(248,221,231,.06);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.media img{width:100%;height:100%;object-fit:cover;display:block}
+.phold{height:100%;display:grid;place-content:center;justify-items:center;gap:.6rem;color:var(--rose);font-size:.85rem;padding:1rem;text-align:center;background:radial-gradient(circle,rgba(157,112,206,.22),transparent 70%)}.phold svg{width:44px;height:44px}
+.cap{position:absolute;inset:auto 6px 6px;padding:1.8rem .8rem .6rem;font-size:.78rem;line-height:1.5;color:var(--ch);background:linear-gradient(transparent,rgba(8,6,11,.88))}
+#lb{position:fixed;inset:0;z-index:50;background:rgba(8,6,11,.95);display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;padding:env(safe-area-inset-top) 8px env(safe-area-inset-bottom)}
+#lb figure{text-align:center;max-width:900px;margin:auto;width:100%}
+#lbImg{height:68svh;animation:rise .7s both}#lbImg .media{border:0;box-shadow:none;background:none;padding:0}#lbImg img{object-fit:contain}
+#lb figcaption{margin-top:.8rem;color:var(--ch);font-style:italic}.dots2{display:flex;gap:8px;justify-content:center;margin-top:.6rem}.dots2 i{width:8px;height:8px;border-radius:50%;background:rgba(248,221,231,.3)}.dots2 i.on{background:var(--rose)}
+.rb{width:48px;height:48px;border-radius:50%;border:1px solid rgba(235,161,194,.5);background:rgba(28,16,37,.8);color:var(--st);font-size:1.4rem;cursor:pointer}
+#lbClose{position:fixed;top:max(10px,env(safe-area-inset-top));right:10px;z-index:2}
+/* điều nhỏ bé */
+.things{display:grid;gap:clamp(3rem,9vw,6rem);margin-top:2rem;width:min(100%,860px)}
+.thing{display:flex;align-items:center;gap:2rem;text-align:left}.thing:nth-child(even){flex-direction:row-reverse}
+.thing .vis{flex:0 0 auto;position:relative;width:clamp(110px,26vw,200px);text-align:center}
+.num{font:italic 500 clamp(4rem,15vw,8rem)/1 var(--disp);color:transparent;-webkit-text-stroke:1px rgba(235,161,194,.5)}
+.vis svg{position:absolute;inset:0;margin:auto;width:60%;color:var(--rose)}
+.thing h3{font:600 .8rem var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}.thing p{color:var(--ch)}
+/* chòm sao */
+.const{position:relative;width:min(100%,520px)}.const svg{width:100%;height:auto;display:block;overflow:visible}
+.cpts circle{fill:var(--ch);opacity:.45;transform:translate(var(--dx),var(--dy));transition:transform 2s cubic-bezier(.2,.8,.2,1),opacity 2s}.cpts.on circle{transform:none;opacity:1}
+.cl{fill:none;stroke:var(--rose);stroke-width:1;opacity:0;transition:opacity 2s .8s}.on .cl{opacity:.6}
+.nl{fill:none;stroke:var(--gold);stroke-width:1.4;stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset 2.2s .4s}.on .nl{stroke-dashoffset:0}
+.const text{font-family:var(--disp);font-weight:600;fill:var(--st);font-size:15px;letter-spacing:2px}
+.heartbtn{position:absolute;left:50%;top:43%;translate:-50% -50%;width:64px;height:64px;border-radius:50%;border:1px solid rgba(235,161,194,.7);background:rgba(28,16,37,.55);color:var(--rose);font-size:1.7rem;cursor:pointer;animation:beat 2.4s ease-in-out infinite}
+@keyframes beat{50%{transform:scale(1.1);box-shadow:0 0 28px rgba(235,161,194,.5)}}
+.lh{font:italic 600 clamp(1.5rem,6vw,3rem) var(--disp);letter-spacing:.12em;color:var(--gold)}
+.reveal{max-width:32ch;font:italic 500 clamp(1.1rem,3vw,1.5rem)/1.6 var(--disp);color:var(--ch);opacity:0;transition:opacity 1.8s 1.2s;min-height:5em}.reveal.in{opacity:1}
+/* thư nhỏ, bí mật, kết */
+.mini{width:96px;height:96px;border-radius:50%;border:1px solid rgba(235,161,194,.5);background:rgba(74,23,53,.35);color:var(--rose);font-size:2.4rem;cursor:pointer;transition:transform .3s}.mini:hover{transform:translateY(-3px)}
+.paper.s{width:min(100%,520px)}
+.keybtn{width:76px;height:76px;border-radius:50%;border:1px solid rgba(157,112,206,.6);background:rgba(157,112,206,.12);color:var(--ch);cursor:pointer;display:grid;place-items:center}.keybtn svg{width:42px;height:42px}
+.secmsg{max-width:34ch;font:italic 500 clamp(1.1rem,3vw,1.5rem)/1.6 var(--disp);color:var(--ch);opacity:0;transition:opacity 1.6s}.secmsg.open{opacity:1}
+.note{position:fixed;left:-8vw;z-index:2;color:var(--rose);font-size:1.8rem;pointer-events:none;animation:fly 4.5s linear forwards}@keyframes fly{to{transform:translate(115vw,-50px) rotate(25deg);opacity:.3}}
+#after{display:flex;flex-direction:column;align-items:center;gap:1.1rem;margin-top:1rem}
+.msg{opacity:0;transform:translateY(14px);transition:opacity 1.6s,transform 1.6s;max-width:30ch}.msg.in{opacity:1;transform:none}
+.msg.m1{font:italic 600 clamp(1.5rem,5vw,2.2rem) var(--disp);color:var(--rose)}.msg.m2{color:var(--ch)}
+.bloom{position:relative;display:grid;place-items:center;min-height:min(80vw,300px);width:100%;max-width:none}
+.bloom .rose{position:absolute;width:min(80vw,300px);opacity:.85}.bloom .names{position:relative;font:italic 600 clamp(1.6rem,7vw,3.2rem) var(--disp);letter-spacing:.06em;text-shadow:0 2px 24px #08060B}
+.row{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;max-width:none}
+/* UI cố định */
+#player{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:60;display:flex;gap:8px;align-items:center;padding:5px 12px 5px 5px;border-radius:99px;background:rgba(28,16,37,.8);border:1px solid rgba(235,161,194,.3);backdrop-filter:blur(8px)}
+#mBtn{width:44px;height:44px;border-radius:50%;border:0;background:linear-gradient(120deg,var(--rose),var(--am));color:#1C1025;font-size:1.1rem;cursor:pointer}#vol{width:64px;accent-color:var(--rose)}
+#player.off{opacity:.55}
+#dots{position:fixed;right:14px;top:50%;translate:0 -50%;z-index:30;display:flex;flex-direction:column;gap:12px}#dots a{width:8px;height:8px;border-radius:50%;background:rgba(248,221,231,.3);transition:.3s}#dots a.on{background:var(--rose);transform:scale(1.5)}
+@media(max-width:700px){#dots{display:none}.bouquet{grid-template-columns:1fr}.frame{max-width:300px;margin:auto}
+.gal{grid-template-columns:1fr 1fr}.f0,.f3,.f4{grid-column:1/3;margin-top:0}.f1,.f2{grid-column:auto;margin-top:0}.f3,.f4{aspect-ratio:4/3}
+.thing,.thing:nth-child(even){flex-direction:column;text-align:center}#lb{grid-template-columns:40px minmax(0,1fr) 40px}.rb{width:40px;height:40px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0s!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<canvas id="fx" aria-hidden="true"></canvas><div id="dim" aria-hidden="true"></div><div id="bar"></div>
+
+<section id="intro" aria-label="Lời mời">
+  <p class="date" data-t="date"></p>
+  <h1 class="disp" data-t="receiverUp" style="--d:.4s"></h1>
+  <p class="sub" data-t="introSub" style="--d:1.4s"></p>
+  <div class="stage" style="--d:2s"><div class="env" id="env"><div class="flap"></div><i class="seal">♥</i></div><div class="rose" id="roseIntro"></div></div>
+  <button class="btn" id="openBtn" style="--d:2.6s" data-t="openBtn"></button>
+  <p class="small" style="--d:2.8s" data-t="openHint"></p>
+  <p class="hand" style="--d:3s;color:var(--ch)" data-t="introFrom"></p>
+</section>
+
+<main id="main" hidden>
+<section class="ch c1" id="ch1" data-ch="Vũ trụ của em">
+  <h2 class="big rv" data-t="c1h"></h2>
+  <p class="lead rv" style="--d:.9s" data-t="c1sub"></p>
+  <div class="orb rv" style="--d:1.4s"><svg viewBox="0 0 300 300" aria-hidden="true" fill="none" stroke="rgba(235,161,194,.35)"><ellipse cx="150" cy="150" rx="140" ry="60" transform="rotate(25 150 150)"/><ellipse cx="150" cy="150" rx="110" ry="110" stroke-dasharray="2 8"/><ellipse cx="150" cy="150" rx="130" ry="45" transform="rotate(-40 150 150)"/><g fill="#FFF6FB" stroke="none"><circle cx="30" cy="110" r="2.5"/><circle cx="250" cy="60" r="2"/><circle cx="260" cy="210" r="3"/><circle cx="90" cy="260" r="2"/><circle cx="150" cy="10" r="2"/></g></svg><span class="disp name" data-t="receiver"></span></div>
+  <p class="para rv" data-t="c1lead"></p>
+  <a class="btn ghost" href="#ch2" data-t="c1btn"></a>
+</section>
+
+<section class="ch c2" id="ch2" data-ch="Lá thư">
+  <button class="btn ghost" id="skipLetter" data-t="skip"></button>
+  <article class="paper" id="paper"><span class="fp"></span><h2 class="hand" data-t="c2h"></h2><div id="letterBody"></div><div class="sign"><span class="hand" data-t="sign"></span><i class="stamp">♥</i></div></article>
+</section>
+
+<section class="ch c3" id="ch3" data-ch="Khu vườn">
+  <h2 class="big rv" data-t="c3h"></h2>
+  <button class="rosebtn rv" id="gardenBtn" aria-expanded="false" aria-label="Chạm vào đóa hoa để hé nở"><span class="rose"></span></button>
+  <p class="small" data-t="c3tap"></p>
+  <div class="wish" id="wish" data-p="wish"></div>
+  <div class="bouquet rv"><div class="frame" id="bqFrame"></div><div><h3 class="hand" data-t="bqH"></h3><div data-p="bouquet"></div></div></div>
+</section>
+
+<section class="ch c4" id="ch4" data-ch="Album">
+  <h2 class="big rv" data-t="c4h"></h2><p class="lead rv" data-t="c4lead"></p><div class="gal" id="gal"></div>
+</section>
+
+<section class="ch c5" id="ch5" data-ch="Điều nhỏ bé">
+  <h2 class="big rv" data-t="c5h"></h2><p class="lead rv" data-t="c5lead"></p><div class="things" id="things"></div>
+</section>
+
+<section class="ch c6" id="ch6" data-ch="Chòm sao">
+  <p class="small" data-t="c6k"></p>
+  <div class="const rv" id="const"><svg viewBox="0 0 400 300" role="img" aria-label="Chòm sao hình trái tim giữa hai cái tên"><path class="nl" d="M98 128C140 50 230 50 266 128"/><g class="cpts" id="cpts"></g><text x="62" y="136" text-anchor="middle" id="nA"></text><text x="330" y="136" text-anchor="middle" id="nB"></text></svg>
+  <button class="heartbtn" id="heartBtn" aria-label="Chạm vào trái tim">♡</button></div>
+  <h2 class="lh rv" data-t="c6h"></h2><p class="small" data-t="c6s"></p><div class="reveal" id="cMsg" data-p="c6msg"></div>
+</section>
+
+<section class="ch c7" id="ch7" data-ch="Mở khi cần">
+  <h2 class="big rv" data-t="c7h"></h2><p class="lead rv" data-t="c7hint"></p>
+  <button class="mini" id="hugEnv" aria-expanded="false" aria-controls="hugLetter" aria-label="Mở hoặc đóng bức thư nhỏ">✉</button>
+  <div class="paper s" id="hugLetter" hidden><div data-p="hug"></div><p class="hand" style="font-size:1.6rem;color:#7a2a58" data-t="hugSign"></p></div>
+  <button class="btn" id="hugGot" hidden data-t="hugGot"></button>
+</section>
+
+<section class="ch c8" id="ch8" data-ch="Bí mật">
+  <p class="lead rv" data-t="c8hint"></p>
+  <button class="keybtn" id="secBtn" aria-label="Mở điều nhỏ bé được giấu ở đây"></button>
+  <div class="secmsg" id="secMsg" data-p="secret"></div>
+</section>
+
+<section class="ch c9" id="ch9" data-ch="Cái ôm">
+  <h2 class="big rv" data-t="c9a"></h2><p class="lead rv" style="--d:.8s" data-t="c9b"></p>
+  <button class="btn big2" id="hug" data-t="c9btn"></button>
+  <div id="after" hidden>
+    <p class="msg m1" data-t="fm1"></p>
+    <p class="msg m2" data-t="fm2a"></p><p class="msg m2" data-t="fm2b"></p><p class="msg m2" data-t="fm2c"></p>
+    <p class="msg hand" style="font-size:1.7rem;color:var(--gold)" data-t="fsign"></p>
+    <div class="bloom msg"><div class="rose" id="roseFinal"></div><div class="names" data-t="couple"></div></div>
+    <div class="row msg" id="fbtns"><button class="btn" id="hug2" data-t="again"></button><button class="btn ghost" id="replay" data-t="replay"></button></div>
+  </div>
+</section>
+</main>
+
+<nav id="dots" aria-label="Các chương"></nav>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Xem ảnh lớn" hidden>
+  <button class="rb" id="lbClose" aria-label="Đóng">✕</button><button class="rb" id="lbPrev" aria-label="Ảnh trước">‹</button>
+  <figure><div id="lbImg"></div><figcaption id="lbCap"></figcaption><div class="dots2" id="lbDots"></div></figure><button class="rb" id="lbNext" aria-label="Ảnh sau">›</button>
+</div>
+<div id="player"><button id="mBtn" aria-label="Bật hoặc tắt nhạc" aria-pressed="false">♪</button><input id="vol" type="range" min="0" max="1" step=".05" value=".5" aria-label="Âm lượng"></div>
+
+<script>
+"use strict";
+/* ============ CẤU HÌNH — sửa nội dung, ảnh, nhạc tại đây ============ */
+const SENDER="Thắng", RECEIVER="Ngọc Huyền";
+const CONFIG={
+  senderName:SENDER, receiverName:RECEIVER, occasion:"20 · 10 · 2026", coupleTitle:"THẮNG ♡ NGỌC HUYỀN", signature:"— Anh "+SENDER,
+  musicSrc:"music.mp3",      // nhạc nền (tùy chọn) — đổi tên tệp tại đây
+  pianoSrc:"piano.mp3",      // tiếng piano của Easter egg (tùy chọn)
+  flowersSrc:"flowers.jpg",  // ảnh hoa thật (tùy chọn); thiếu thì hiện hoa vector
+  photos:[ // thêm/bớt ảnh: chỉ cần sửa danh sách này, album + lightbox tự theo số lượng
+    {src:"image1.jpg",caption:"Khoảnh khắc yêu nhất sau 1 ngày mệt mỏi."},
+    {src:"image2.jpg",caption:"Vợ ai xinh thế này."},
+    {src:"image3.jpg",caption:"Không hẹn trước nhưng chỉ cần tiện là có cớ để gặp."},
+    {src:"image4.jpg",caption:"Một bó hoa, một kỉ niệm, một hạnh phúc, và một sự nổ lực sau 6  tiếng của anh."},
+    {src:"image5.jpg",caption:"Coi cách em trân trọng bó hoa của mình kìa."}
+  ],
+  text:{
+    introSub:"Có một thế giới nhỏ anh muốn dành riêng cho em.", introFrom:"Được gửi đến em bằng tất cả sự chân thành — Anh "+SENDER+".",
+    openBtn:"Mở món quà của anh", openHint:"Dành một chút thời gian cho thế giới của hai đứa mình nhé.",
+    c1h:"Có những người xuất hiện rồi dần trở thành điều đặc biệt.", c1sub:"Với anh, em là một trong những điều đẹp đẽ như thế.",
+    c1lead:"Giữa thế giới rộng lớn với biết bao con người đến rồi đi, chúng mình đã có cơ hội biết đến nhau, bước vào cuộc sống của nhau và tạo nên những kỷ niệm.",
+    c1btn:"Tiếp tục câu chuyện của tụi mình ↓",
+    c2h:"GỬI CỤC VÀNG CỦA ANH 💗", skip:"Hiện toàn bộ bức thư ngay",
+    c3h:"Khu vườn dành riêng cho "+RECEIVER, c3tap:"Chạm vào đóa hoa nhé",
+    bqH:"Hoa rồi sẽ phai, điều chân thành thì còn lại.",
+    c4h:"Những khoảnh khắc anh muốn giữ lại.", c4lead:"Có những bức ảnh không chỉ lưu giữ hình ảnh, mà còn giữ lại cảm giác của một ngày nào đó.", phText:"Đặt ảnh kỷ niệm tại đây",
+    c5h:"Những điều anh muốn em nhớ.",
+    c5lead:"Vài điều trong bức thư mà anh mong em giữ lại thật gần.",
+    c6k:"OUR CONSTELLATION", c6h:"MỘT KHOẢNG TRỜI CHUNG", c6s:"Mỗi người một thế giới riêng, cùng chung một bầu trời.",
+    c7h:"Một lời nhắn dành cho những ngày không dễ dàng.", c7hint:"Em có thể mở bức thư này bất cứ khi nào muốn.", hugSign:"— Anh "+SENDER, hugGot:"Anh nhận được cái ôm của em rồi nhé 💗",
+    c8hint:"Cục vàng, còn một điều nho nhỏ anh giấu ở đây…",
+    c9a:"Trước khi em rời khỏi thế giới nhỏ này…", c9b:"Anh vẫn còn dành cho em một cái ôm.", c9btn:"Bấm vào đây nếu em muốn ôm anh "+SENDER+" một cái 🤗",
+    fm1:"Anh luôn ở đây khi em cần anh. 💕", fm2a:"Ôm được anh thì nhớ ôm thật chặt nhé.", fm2b:"Vì anh cũng muốn dành cho em một cái ôm thật lâu, thật dịu dàng.", fm2c:"Chúc cục vàng của anh có một ngày 20/10 thật hạnh phúc.",
+    fsign:"Yêu em, "+RECEIVER+". — Anh "+SENDER, again:"Ôm anh thêm lần nữa 💞", replay:"Xem lại câu chuyện của chúng mình ↺"
+  },
+  /* Các khối bắt đầu bằng "@" được LẤY NGUYÊN VĂN từ bức thư (đoạn có phần đầu trùng) — chỉ một nguồn dữ liệu duy nhất */
+  blocks:{
+    wish:["@Mong cô gái nhỏ của anh"],
+    bouquet:["@Nếu hôm nay có hoa dành tặng em","@Một bó hoa có thể khiến em mỉm cười"],
+    c6msg:["@Mong rằng giữa những thay đổi của cuộc sống"],
+    hug:["@Em không cần phải lúc nào cũng mạnh mẽ","@Có những ngày em chỉ cần sống chậm lại","@Hãy ăn uống đầy đủ","@Và nếu có những ngày cuộc sống không dịu dàng"],
+    secret:["@Thương em vì em là chính em."]
+  },
+  things:[
+    {icon:"petal",title:"Là chính em",text:"@Anh mong em sẽ luôn là Ngọc Huyền"},
+    {icon:"star",title:"Một thế giới riêng",text:"@Anh không muốn trở thành cả thế giới của em"},
+    {icon:"strong",title:"Dịu dàng với chính mình",text:"@Anh mong em có thể dịu dàng với bản thân"},
+    {icon:"talk",title:"Lắng nghe & chân thành",text:"@Anh muốn chúng mình có thể cùng cười khi vui"}
+  ],
+  /* BỨC THƯ GỐC — nguyên văn, mỗi dòng là một đoạn */
+  letter:`To the girl who makes ordinary days feel extraordinary.
+Dear Ngọc Huyền,
+Bxaaa oiiii, cục vàng của anh.
+Anh đã nghĩ rất nhiều về những điều mình muốn viết cho em trong ngày đặc biệt này. Có những điều anh vẫn thường muốn nói, nhưng khi thật sự ngồi xuống và cố gắng diễn đạt thành lời, anh lại nhận ra rằng hóa ra tình cảm trong lòng đôi khi lớn hơn những gì ngôn từ có thể diễn tả. Anh có thể viết rất nhiều câu chữ, có thể tìm những lời văn thật đẹp, nhưng anh vẫn sợ rằng dù mình có nói bao nhiêu đi nữa, em cũng chưa thể hiểu hết được em quan trọng với anh đến nhường nào.
+Thế nên hôm nay, anh không muốn chỉ gửi đến em một lời chúc nhân ngày 20/10. Anh muốn viết cho em một bức thư, lưu lại những điều anh nghĩ về em, về chúng mình và về thứ tình cảm mà anh luôn mong có thể gìn giữ bằng tất cả sự chân thành của mình.
+Anh không biết phải gọi cuộc gặp gỡ của chúng mình là duyên phận, là sự tình cờ đẹp đẽ của cuộc đời hay đơn giản chỉ là may mắn. Anh chỉ biết rằng giữa thế giới rộng lớn với biết bao con người đến rồi đi, chúng mình đã có cơ hội biết đến nhau, bước vào cuộc sống của nhau và tạo nên những kỷ niệm mà có lẽ sau này, khi nhớ lại, anh vẫn sẽ bất giác mỉm cười.
+Em biết không, đôi khi anh nghĩ cuộc đời thật kỳ lạ. Chúng ta có thể đi qua rất nhiều nơi, gặp gỡ rất nhiều người, nghe vô số câu chuyện và trải qua biết bao ngày tháng tưởng chừng giống nhau. Nhưng rồi sẽ có một người xuất hiện, khiến những điều vốn rất bình thường bỗng trở nên khác biệt. Một tin nhắn cũng có thể khiến mình vui hơn, một câu nói vu vơ cũng đủ khiến mình nhớ mãi, và một ngày vốn chẳng có gì đáng mong chờ lại trở nên đặc biệt chỉ vì biết rằng cuối ngày vẫn có một người để mình quan tâm, hỏi han và kể nghe những chuyện chẳng đầu chẳng cuối.
+Đối với anh, em mang đến cảm giác ấy.
+Anh thích những điều giản dị mà chúng mình có. Anh thích những cuộc trò chuyện không cần phải có chủ đề thật thú vị, những lần trêu chọc nhau vì những chuyện nhỏ nhặt, những khoảnh khắc chỉ cần biết đối phương vẫn đang ở đó cũng khiến lòng mình bình yên hơn một chút. Anh nghĩ rằng sự đẹp đẽ của tình yêu không nằm hoàn toàn ở những điều lớn lao, những món quà đắt tiền hay những lời hứa thật hoa mỹ. Đôi khi, điều đáng quý nhất chính là giữa một ngày dài đầy những chuyện phải lo nghĩ, chúng ta vẫn muốn dành cho nhau một chút thời gian, vẫn muốn kể nhau nghe hôm nay đã trải qua những gì và vẫn quan tâm đến cảm xúc của người kia dù bản thân cũng có những mệt mỏi riêng.
+Vì thế, nếu có ai hỏi anh tình yêu đẹp nhất là như thế nào, có lẽ anh sẽ không trả lời bằng một câu chuyện thật hoành tráng. Anh nghĩ tình yêu đẹp là khi một người dần trở thành một phần thân thuộc trong cuộc sống của người còn lại, không phải vì người ấy khiến mọi thứ trở nên hoàn hảo, mà vì sự hiện diện của người ấy khiến mình muốn sống tử tế hơn, biết quan tâm hơn và trân trọng những điều nhỏ bé hơn.
+Và anh rất vui vì mình có cơ hội được cảm nhận điều đó cùng em.
+Cục vàng à, anh muốn em biết rằng trong mắt anh, em không chỉ đáng quý vì em là người anh thương. Em vốn đã là một cô gái có giá trị của riêng mình, ngay cả trước khi anh xuất hiện trong cuộc đời em.
+Em có những suy nghĩ riêng, những ước mơ riêng, những điều em thích và cả những điều em muốn làm nhưng có thể vẫn chưa đủ tự tin để thực hiện. Em có thể có những ngày thật vui vẻ, tràn đầy năng lượng, nhưng cũng có những ngày chẳng muốn nói chuyện với ai, chẳng muốn cố gắng thêm điều gì và chỉ mong mọi thứ xung quanh nhẹ nhàng hơn một chút. Em có thể mạnh mẽ trong mắt người khác, nhưng cũng có lúc nhạy cảm, dễ buồn và cần được vỗ về. Và anh nghĩ tất cả những điều ấy đều là những phần rất đỗi bình thường, rất chân thật tạo nên con người em.
+Anh không muốn em nghĩ rằng mình phải luôn vui vẻ mới xứng đáng được yêu thương, phải luôn giỏi giang mới khiến người khác tự hào hay phải trở thành một cô gái hoàn hảo mới có thể nhận được sự trân trọng từ ai đó.
+Không đâu, bé yêu của anh.
+Em không cần phải chứng minh giá trị của mình bằng cách cố gắng làm hài lòng tất cả mọi người. Em cũng không cần phải chạy thật nhanh chỉ vì sợ rằng mình đang chậm hơn người khác. Mỗi người đều có hành trình riêng, có thời điểm trưởng thành riêng và có những trận chiến mà chẳng ai ngoài chính mình hiểu rõ. Nếu có một ngày em cảm thấy mình chưa đủ tốt, anh mong em hãy nhớ rằng một ngày chưa tốt không có nghĩa là em là một người không tốt; một lần thất bại không thể quyết định cả tương lai, và việc em đang chậm lại đôi chút cũng không có nghĩa là em đang đứng yên.
+Anh mong em học cách nhìn nhận bản thân bằng ánh mắt dịu dàng hơn. Hãy cho mình quyền được sai, được sửa đổi, được bắt đầu lại và được trưởng thành theo cách của riêng mình. Hãy cứ có ước mơ, cứ tò mò về thế giới, cứ thử những điều em yêu thích và đừng để một vài lời đánh giá khiến em quên đi những điều mình thật sự mong muốn.
+Anh muốn nhìn thấy em tự tin bước về phía những điều em yêu. Muốn được nghe em kể về một chuyện khiến em hào hứng, một mục tiêu em đã đạt được hay một thành tựu tuy nhỏ nhưng khiến em vui cả ngày. Anh muốn nhìn thấy ánh mắt em sáng lên khi nói về điều mình thích, muốn thấy em có thể tự hào về chính mình mà không cần phải chờ bất kỳ ai xác nhận rằng em đủ tốt.
+Bởi vì với anh, điều tuyệt vời nhất không phải là nhìn thấy người con gái mình yêu thay đổi tất cả để phù hợp với mình. Mà là được nhìn thấy cô gái ấy ngày càng hiểu bản thân hơn, biết mình muốn gì, biết điều gì xứng đáng và có đủ tự tin để trở thành phiên bản mà chính cô ấy mong muốn.
+Anh yêu em, nhưng anh cũng mong em yêu lấy chính mình nhiều hơn.
+Anh muốn tình yêu của chúng mình trở thành một điều đẹp đẽ trong cuộc sống của em, chứ không phải một chiếc lồng khiến em phải thu nhỏ thế giới của mình lại. Anh không mong em từ bỏ những điều em yêu thích chỉ để dành tất cả thời gian cho anh. Anh mong em vẫn có những người bạn để sẻ chia, những sở thích để theo đuổi, những dự định để thực hiện và những ước mơ đủ lớn để khiến em háo hức mỗi khi nghĩ về tương lai.
+Anh muốn em có thể sống một cuộc đời thật phong phú, thật nhiều màu sắc và có nhiều lý do để mỉm cười. Anh cũng muốn được nghe em kể về tất cả những điều ấy, được vui cùng niềm vui của em và được ở bên cạnh em trong khả năng của mình khi em cần một người đồng hành.
+Bởi vì anh nghĩ, thương một người thật lòng không phải là muốn người ấy chỉ nhìn thấy mình. Mà là muốn người ấy có thể ngẩng đầu nhìn cả thế giới, sống một cuộc đời xứng đáng với những điều tốt đẹp mà họ vốn có, rồi khi cần nghỉ ngơi, vẫn biết rằng bên cạnh mình có một người sẵn lòng lắng nghe.
+Anh không muốn trở thành cả thế giới của em. Anh muốn cùng em tạo nên một thế giới mà ở đó, cả hai đều được là chính mình, được tôn trọng và được yêu thương.
+Một thế giới không nhất thiết ngày nào cũng ngập tràn những điều lãng mạn, không cần lúc nào cũng hoàn hảo và cũng chẳng phải lúc nào hai người cũng hiểu nhau ngay từ đầu. Nhưng đó sẽ là nơi chúng mình có thể nói ra những điều đang nghĩ, thành thật với cảm xúc của mình và cùng nhau tìm cách giải quyết khi có chuyện không vui.
+Anh biết rằng dù yêu nhau nhiều đến đâu, hai người vẫn có thể có những suy nghĩ khác nhau. Có những lúc anh vô tình nói điều gì đó chưa đủ tinh tế, có lúc em có thể buồn vì một chuyện mà anh chưa kịp hiểu, và cũng có thể sẽ có những ngày cả hai đều mệt mỏi đến mức chẳng biết bắt đầu giải thích từ đâu.
+Anh không dám nói rằng mình sẽ luôn đúng, cũng không dám hứa rằng mình sẽ hiểu em ngay lập tức trong mọi hoàn cảnh. Anh chỉ mong rằng khi những điều ấy xảy ra, anh vẫn đủ bình tĩnh để lắng nghe em, đủ chân thành để nhận ra phần thiếu sót của mình và đủ bao dung để chúng mình không biến một chuyện nhỏ thành khoảng cách lớn giữa hai người.
+Anh muốn em biết rằng em có thể nói với anh khi em buồn, khi em không thích điều gì, khi em cảm thấy chưa được quan tâm hoặc khi em cần anh thay đổi một điều gì đó. Anh không muốn em phải giấu những cảm xúc của mình chỉ vì sợ làm phiền anh. Anh muốn hiểu em nhiều hơn qua những điều em chia sẻ, chứ không phải bắt em im lặng rồi tự mình đoán xem em đang nghĩ gì.
+Và anh cũng mong chúng mình có thể học cách lắng nghe nhau ngay cả khi chưa hoàn toàn đồng ý. Bởi anh nghĩ, tình yêu trưởng thành không phải là hai người chẳng bao giờ xảy ra bất đồng, mà là sau mỗi lần bất đồng, cả hai vẫn muốn tìm hiểu cảm xúc của nhau thay vì chỉ cố chứng minh ai đúng, ai sai.
+Anh muốn chúng mình có thể cùng cười khi vui, cùng nói chuyện khi có điều chưa ổn và cùng tìm ra cách khiến mọi thứ tốt hơn. Không phải vì anh sợ những khoảng lặng, mà vì anh trân trọng mối quan hệ này đủ nhiều để không muốn những điều chưa nói trở thành những khoảng cách chẳng cần thiết.
+Anh không mong mình sẽ là một người yêu hoàn hảo trong mắt em. Anh chỉ mong mình là người luôn có ý thức để trở nên tốt hơn trong cách yêu em.
+Anh muốn tình cảm của mình không chỉ xuất hiện trong những câu nói ngọt ngào khi mọi chuyện đang vui vẻ, mà còn hiện diện trong cách anh cư xử với em vào những ngày bình thường. Trong việc anh nhớ hỏi em đã ăn uống đầy đủ chưa, có đang mệt không, hôm nay có chuyện gì khiến em vui hay có điều gì đang làm em bận lòng. Trong việc anh biết quan tâm đến những chi tiết nhỏ, biết dành thời gian cho em và không xem sự hiện diện của em là điều hiển nhiên.
+Anh hiểu rằng lời nói có thể khiến người ta rung động trong một khoảnh khắc, nhưng sự chân thành cần được chứng minh bằng thời gian. Một lời hứa có thể rất đẹp khi được nói ra, nhưng chỉ khi đi cùng hành động, nó mới dần trở thành điều khiến người khác an tâm.
+Vậy nên, anh không muốn chỉ nói rằng anh thương em nhiều lắm rồi để em tự cảm nhận lấy tất cả. Anh muốn cố gắng để em có thể nhìn thấy điều ấy qua cách anh đối xử với em, qua việc anh tôn trọng cảm xúc của em, qua sự nghiêm túc khi nghĩ về mối quan hệ này và qua những lần anh chọn cùng em giải quyết vấn đề thay vì bỏ mặc em với những suy nghĩ của riêng mình.
+Anh biết mình vẫn còn nhiều điều phải học. Anh cũng có những thiếu sót, những lúc chưa đủ khéo léo và những điều cần cải thiện. Nhưng anh mong rằng theo thời gian, em sẽ không chỉ nghe anh nói rằng mình yêu em, mà còn cảm nhận được rằng anh thật sự đang cố gắng để tình yêu ấy trở thành một điều có ý nghĩa trong cuộc sống của cả hai.
+Với anh, em không phải một món quà chỉ để ngắm nhìn, cũng không phải một điều may mắn mà anh có thể mặc nhiên cho rằng mình sẽ luôn giữ được. Em là một con người với cảm xúc, suy nghĩ, giới hạn và những mong muốn của riêng mình. Vì thế, anh muốn trân trọng em không phải bằng cách xem em là của riêng mình, mà bằng cách đối xử với em như một người anh luôn muốn thấu hiểu, tôn trọng và gìn giữ mối quan hệ cùng nhau xây dựng.
+Anh muốn em được tự do nói lên suy nghĩ của mình, được thoải mái chia sẻ những điều khiến em vui và cả những điều em không hài lòng. Anh muốn em biết rằng yêu nhau không có nghĩa là một người phải luôn nhường nhịn, còn người kia luôn được quyền quyết định. Tình yêu đẹp cần có sự vun đắp từ cả hai phía, cần sự quan tâm, lòng tin và cả sự tử tế trong những lúc chúng mình chưa hiểu nhau.
+Anh sẽ không thể thay em trải qua tất cả những khó khăn của cuộc đời, cũng không thể bảo đảm rằng mọi ngày sau này đều thuận lợi. Nhưng trong những điều anh có thể làm, anh muốn làm bằng sự chân thành. Anh muốn khi em mệt mỏi, em có thể tìm đến anh để được lắng nghe; khi em vui vẻ, em có thể kể anh nghe mà không ngại rằng câu chuyện ấy quá nhỏ nhặt; và khi em cần tập trung cho những mục tiêu của riêng mình, em vẫn có thể yên tâm theo đuổi chúng mà không cảm thấy mình đang bỏ quên tình yêu.
+Bởi anh mong tình yêu này sẽ khiến cả hai trưởng thành hơn, chứ không khiến bất kỳ ai phải đánh mất bản thân.
+Bxaaa oiiii, em biết điều gì khiến anh cảm thấy đẹp đẽ nhất khi gặp được một người không?
+Có lẽ không chỉ là những rung động ban đầu, không chỉ là cảm giác nhớ nhung hay vui vẻ mỗi khi nhìn thấy tin nhắn của người ấy. Anh nghĩ điều đẹp đẽ hơn cả là cảm giác càng hiểu, mình càng muốn thương người ấy nhiều hơn.
+Ban đầu, có thể chúng ta thích nhau vì những điều dễ nhận thấy. Nhưng theo thời gian, khi hiểu thêm về suy nghĩ, tính cách, những nỗi lo, những niềm vui và cả những phần chưa hoàn hảo của nhau, tình cảm sẽ có cơ hội trở nên sâu sắc hơn. Chúng ta không còn chỉ yêu hình ảnh đẹp đẽ mà mình nhìn thấy, mà còn học cách trân trọng con người thật đang hiện diện trước mắt mình.
+Anh muốn được biết nhiều hơn về em. Muốn biết những điều nhỏ nhặt có thể khiến em vui cả ngày, những món em thích, những nơi em muốn đến, những ước mơ em vẫn âm thầm giữ trong lòng. Anh muốn được nghe những câu chuyện em đã kể hàng chục lần nhưng vẫn hào hứng khi nhắc lại, cũng muốn được nghe những điều em chưa từng có cơ hội chia sẻ cùng ai.
+Anh muốn biết những lúc em im lặng là vì em đang cần một chút không gian riêng hay vì em đang mong có người hỏi han. Muốn hiểu những điều khiến em cảm thấy an toàn, những giới hạn em cần được tôn trọng và cách em muốn được yêu thương. Không phải để anh có thể đoán đúng mọi suy nghĩ của em, mà để mỗi ngày mình có thể hiểu nhau thêm một chút.
+Anh cũng muốn em hiểu anh theo cách ấy. Muốn em biết phía sau những lời nói đôi khi vụng về của anh là những suy nghĩ mà anh chưa biết cách diễn đạt thật tốt; phía sau những ngày anh bận rộn vẫn có sự quan tâm anh muốn dành cho em; và phía sau mong muốn được chăm sóc em là hy vọng rằng tình cảm của chúng mình có thể trở thành một điều tốt đẹp, bình yên và đáng trân trọng trong cuộc đời của cả hai.
+Anh không biết tương lai sẽ có những gì đang đợi chúng mình. Cuộc đời còn dài, mỗi người rồi sẽ có thêm nhiều trải nghiệm, thêm nhiều mục tiêu và những trách nhiệm mới. Có thể sẽ có những khoảng thời gian bận rộn hơn hiện tại, khi chúng mình không thể nói chuyện nhiều như trước hoặc phải học cách cân bằng giữa tình yêu, việc học, gia đình và những dự định riêng.
+Nhưng anh hy vọng rằng khi bước vào những chặng đường ấy, chúng mình vẫn nhớ rằng người ở bên cạnh mình cũng là một con người đang cố gắng xây dựng cuộc sống của riêng họ. Thay vì yêu cầu người kia phải luôn có mặt vào mọi thời điểm, chúng mình có thể học cách tin tưởng, thông cảm và tìm ra cách dành cho nhau sự quan tâm phù hợp.
+Anh muốn cổ có thật nhiều trải nghiệm đẹp, có cơ hội học hỏi và theo đuổi điều mình mong muốn. Anh muốn em được sống một tuổi trẻ có những niềm vui của riêng mình, được cười thật nhiều, được khám phá những điều mới và được trưởng thành qua cả những lần chưa làm tốt.
+Nếu một ngày em đạt được điều gì đó mà em từng mong ước, anh hy vọng mình có thể là một trong những người vui mừng thật lòng vì thành công ấy. Nếu một ngày em phải đối mặt với thất bại, anh hy vọng mình có thể nhắc em rằng thất bại không làm em mất đi giá trị vốn có. Và nếu có những lúc em chỉ muốn ngồi yên, chưa cần tìm lời giải cho mọi vấn đề, anh mong mình đủ kiên nhẫn để ở cạnh em mà không khiến em cảm thấy phải nhanh chóng trở nên ổn hơn.
+Anh không muốn em phải giỏi giang mọi lúc, cũng không muốn em cảm thấy mình cần mang đến những điều đặc biệt để giữ được tình yêu của anh. Anh muốn được thương em cả trong những ngày em rạng rỡ lẫn những ngày em chẳng có tâm trạng làm gì. Dĩ nhiên, anh không thể thay em giải quyết mọi vấn đề, nhưng anh có thể cố gắng để em biết rằng mình không cần phải che giấu tất cả những mệt mỏi trước người mà em tin tưởng.
+Và em à, nếu có những ngày em cảm thấy bản thân không đủ xinh đẹp, không đủ giỏi giang hoặc không bằng người khác ở một điều gì đó, anh mong em đừng vội đối xử khắt khe với mình.
+Em không cần phải trở thành một phiên bản giống bất kỳ ai để được trân trọng. Em không cần phải so sánh hành trình của mình với hành trình của người khác rồi tự trách vì sao mình chưa đạt được những điều họ đã có. Mỗi người đều có những ưu điểm, những khó khăn và những cơ hội khác nhau. Có những điều người khác làm tốt hơn em, cũng sẽ có những điều rất riêng mà chỉ em mới có thể tạo nên.
+Anh mong em nhận ra giá trị của mình không chỉ nằm ở ngoại hình, thành tích hay những lời khen từ người khác. Nó còn nằm trong cách em đối xử với mọi người, trong những nỗ lực em đã bỏ ra, trong lòng tốt em dành cho người khác, trong khả năng đứng dậy sau những ngày không vui và trong việc em vẫn tiếp tục học hỏi dù đôi khi chẳng dễ dàng gì.
+Anh muốn em trở thành một cô gái biết yêu thương, nhưng cũng biết bảo vệ những giới hạn của bản thân; biết quan tâm đến người khác, nhưng không vì thế mà quên mất cảm xúc của mình; biết hy vọng vào tình yêu, nhưng vẫn có những ước mơ và mục tiêu độc lập.
+Anh mong em được đối xử tử tế không chỉ bởi người yêu em, mà còn bởi những người em gặp trong cuộc sống. Và hơn hết, anh mong em cũng học được cách đối xử tử tế với chính mình.
+Bởi vì cục vàng của anh xứng đáng được sống một cuộc đời không phải lúc nào cũng hoàn hảo, nhưng có đủ bình yên để em có thể thở phào, đủ niềm vui để em có thể cười thật tươi và đủ tự tin để em không phải nghi ngờ giá trị của chính mình mỗi khi cuộc sống có điều không như ý.
+Nhân ngày Phụ nữ Việt Nam 20/10, anh muốn gửi đến em không chỉ một lời chúc, mà còn là lời nhắn nhủ rằng em hãy luôn trân trọng cô gái mà em đang trở thành.
+Anh chúc em luôn khỏe mạnh, bình an và có thật nhiều niềm vui trong cuộc sống. Chúc em có đủ dũng khí để bước đến những điều mình mong muốn, đủ kiên trì để theo đuổi những mục tiêu quan trọng và đủ dịu dàng với bản thân để biết nghỉ ngơi khi đã mệt.
+Mong những cố gắng của em rồi sẽ được đền đáp bằng những kết quả xứng đáng. Mong những dự định em đang ấp ủ sẽ từng bước thành hiện thực. Mong rằng mỗi khi nhìn về phía trước, em vẫn có thể tìm thấy một điều gì đó khiến mình háo hức, một mục tiêu khiến mình muốn cố gắng và một lý do khiến mình tin rằng ngày mai vẫn có thể tốt đẹp hơn hôm nay.
+Anh chúc em gặp được nhiều người tử tế, trải nghiệm nhiều điều đáng nhớ và có đủ tỉnh táo để nhận ra đâu là những điều thật sự quan trọng với mình. Chúc em không phải vì những lời nói vô tình của ai đó mà quên đi những điều tốt đẹp vốn có. Chúc em dù đi qua những ngày vui hay buồn vẫn giữ được sự chân thành, lòng tốt và những nét đáng yêu rất riêng của mình.
+Mong em luôn có những người sẵn sàng lắng nghe khi em cần chia sẻ, có gia đình yêu thương và có đủ thời gian để chăm sóc bản thân. Mong em ăn uống đầy đủ, ngủ nghỉ đúng giờ, đừng quá mải mê với những điều xung quanh mà quên mất sức khỏe của chính mình. Có những điều nghe thật nhỏ nhặt, nhưng anh nghĩ đôi khi sự quan tâm chân thành nhất lại bắt đầu từ chính những chuyện bình thường như vậy.
+Và anh cũng chúc cho cô gái mà anh thương sẽ có thật nhiều ngày hạnh phúc, không chỉ vì nhận được quà hay những lời khen, mà vì em thật sự cảm thấy hài lòng với cuộc sống mình đang xây dựng. Mong em có thể cười thật tự nhiên, vui vì những điều mình yêu thích, tự hào về những gì mình đã cố gắng và an tâm rằng em không cần phải trở thành bất kỳ ai khác để xứng đáng với tình yêu thương.
+Nếu hôm nay có hoa dành tặng em, anh mong em sẽ vui vì vẻ đẹp của những bông hoa. Nhưng anh cũng mong em nhớ rằng vẻ đẹp ấy rồi sẽ phai theo thời gian, còn những điều đáng quý nhất trong một mối quan hệ cần được nuôi dưỡng qua từng ngày.
+Một bó hoa có thể khiến em mỉm cười trong một buổi chiều, một món quà có thể trở thành kỷ niệm đẹp, nhưng anh hy vọng sự trân trọng mà anh dành cho em sẽ không chỉ xuất hiện vào những ngày đặc biệt. Anh muốn những ngày bình thường của chúng mình cũng có sự quan tâm, những cuộc trò chuyện chân thành, những lời hỏi han vừa đủ và những hành động nhỏ nhặt khiến đối phương cảm thấy mình được để tâm.
+Anh muốn sau này khi nghĩ về tình yêu, em không chỉ nhớ đến những khoảnh khắc lãng mạn mà còn nhớ đến cảm giác được lắng nghe, được tôn trọng, được là chính mình và được cùng một người giải quyết những điều không hoàn hảo bằng sự chân thành.
+Anh không mong mình sẽ trở thành người duy nhất mang đến niềm vui cho em, bởi cuộc sống của em còn có gia đình, bạn bè, những ước mơ và những điều tuyệt vời khác. Nhưng anh thật lòng hy vọng mình có thể là một phần đẹp đẽ trong cuộc sống ấy. Một người mà khi nghĩ đến, em không phải cảm thấy áp lực hay lo lắng phải trở thành phiên bản tốt nhất của mình ngay lập tức, mà có thể mỉm cười vì biết rằng mình được trân trọng bằng những gì chân thật nhất.
+Và nếu sau này, vào một ngày bình thường nào đó, em vô tình đọc lại bức thư này, anh mong em sẽ không chỉ nhớ rằng đã từng có một chàng trai viết cho em thật nhiều lời ngọt ngào. Anh mong em có thể nhớ đến những điều chúng mình đã cùng trải qua, những lần cả hai cố gắng hiểu nhau hơn, những khoảnh khắc giản dị từng khiến chúng mình vui và những điều nhỏ bé đã góp phần tạo nên câu chuyện của riêng mình.
+Anh mong khi nhìn lại, em sẽ thấy rằng tình cảm của chúng mình không chỉ được tạo nên bởi những lời hứa trong những ngày hạnh phúc, mà còn bởi những lần biết lắng nghe, biết sửa đổi, biết nhận lỗi, biết cảm thông và biết cùng nhau vun đắp.
+Anh không thể hứa trước rằng cuộc đời sẽ luôn thuận lợi, cũng không thể nói rằng chúng mình sẽ chẳng bao giờ có những ngày khó khăn. Nhưng điều anh có thể lựa chọn ở hiện tại là nghiêm túc với tình cảm của mình, trân trọng thời gian chúng ta có và không ngừng học cách yêu thương em bằng một trái tim chân thành cùng những hành động thực tế.
+Anh muốn em biết rằng anh không xem tình cảm của chúng mình là một điều hiển nhiên. Anh biết mỗi người đều có quyền lựa chọn cách sống, cách yêu thương và cách xây dựng tương lai. Vì thế, anh càng trân trọng việc chúng mình đã lựa chọn mở lòng, dành thời gian cho nhau và cho nhau cơ hội trở thành một phần trong cuộc sống của đối phương.
+Anh biết ơn những ngày chúng mình vui vẻ, biết ơn những câu chuyện nhỏ nhặt, những khoảnh khắc khiến anh bật cười và cả những điều đã giúp anh hiểu thêm về em. Bởi đôi khi, chính những chuyện tưởng chừng chẳng đáng kể lại là thứ khiến một mối quan hệ trở nên gần gũi và có ý nghĩa.
+Cảm ơn em vì đã xuất hiện trong cuộc sống của anh bằng chính con người em. Cảm ơn em vì những khoảnh khắc chúng mình đã có, vì những điều em chia sẻ, vì những niềm vui em mang đến và vì cơ hội để anh được hiểu thêm về một người mà anh trân trọng.
+Cảm ơn em vì đã cho anh cơ hội được quan tâm đến em, được nhớ xem hôm nay em thế nào, được vui khi em có chuyện tốt và được mong rằng những ngày sau này của em sẽ luôn có nhiều điều đáng chờ đợi.
+Anh không nghĩ rằng chỉ cần gặp được một người mình thương thì mọi thứ tự nhiên sẽ trở nên dễ dàng. Nhưng anh tin rằng khi hai người thật sự trân trọng nhau, họ sẽ có thêm lý do để học cách giao tiếp tốt hơn, trưởng thành hơn và cùng xây dựng một mối quan hệ lành mạnh.
+Anh mong mình có thể làm được điều đó cùng em.
+Mong rằng chúng mình sẽ có thêm thật nhiều kỷ niệm đẹp, nhiều câu chuyện để kể, nhiều điều mới mẻ để trải nghiệm và nhiều ngày bình thường để nhận ra rằng hạnh phúc đôi khi chẳng cần phải cầu kỳ. Có thể chỉ là một lời hỏi han đúng lúc, một cuộc trò chuyện trước khi ngủ, một lần kể nhau nghe chuyện trong ngày hay một khoảnh khắc cả hai cùng cười vì một điều rất ngớ ngẩn.
+Mong rằng giữa những thay đổi của cuộc sống, chúng mình vẫn dành cho nhau sự chân thành. Mong rằng khi trưởng thành hơn, mỗi người đều có thể tự hào về con đường mình đang đi, đồng thời vẫn đủ quan tâm để không bỏ quên người đã cùng mình trải qua những ngày tháng này.
+Và mong rằng dù tương lai đưa chúng mình đến những trải nghiệm nào, những điều đẹp đẽ mà chúng mình đang có sẽ luôn được đối xử bằng sự trân trọng xứng đáng.
+Cục vàng à, anh muốn em nhớ rằng em không cần phải trở nên hoàn hảo để được yêu thương, cũng không cần phải làm điều gì thật lớn lao mới trở thành một người đặc biệt.
+Em có giá trị của riêng em, có những điều tốt đẹp mà anh vẫn đang từng ngày khám phá, có những ước mơ xứng đáng được theo đuổi và có một cuộc đời mà anh mong em sẽ sống thật trọn vẹn.
+Anh hy vọng tình yêu này sẽ khiến em có thêm những ngày vui, thêm niềm tin vào sự chân thành và thêm một người sẵn lòng lắng nghe những câu chuyện của em. Nhưng anh cũng mong rằng ngay cả trong những ngày chúng mình không thể ở cạnh nhau, em vẫn có thể tự tạo cho mình niềm vui, vẫn biết yêu bản thân, vẫn tự tin bước tiếp và vẫn hiểu rằng cuộc sống của em luôn có rất nhiều điều đáng để hy vọng.
+Anh không muốn em chỉ hạnh phúc khi có anh bên cạnh. Anh muốn em hạnh phúc cả khi đang theo đuổi những mục tiêu của riêng mình, khi đạt được một điều em mong ước, khi ở cạnh gia đình, khi cười đùa với bạn bè và khi dành thời gian chăm sóc chính mình.
+Nếu anh có thể góp thêm một chút niềm vui vào cuộc sống ấy, có thể cùng em lưu giữ một vài kỷ niệm đẹp và có thể khiến em cảm thấy được yêu thương thêm một chút, thì với anh, đó đã là một điều rất đáng quý.
+Bởi tình yêu không phải là khiến một người trở nên phụ thuộc vào mình, mà là cùng nhau tạo ra một mối quan hệ nơi cả hai có thể phát triển, có thể chia sẻ và có thể nhìn thấy những điều tốt đẹp hơn trong cuộc sống.
+Anh mong em sẽ luôn là Ngọc Huyền với những nét đáng yêu, những suy nghĩ riêng, những ước mơ của mình và cả những điều mà chỉ khi thật sự hiểu em, người ta mới có thể nhận ra. Anh không mong em phải thay đổi tất cả để phù hợp với bất kỳ hình mẫu nào. Anh chỉ mong em luôn có cơ hội trở thành một phiên bản mà chính em cảm thấy yêu quý và tự hào.
+Còn về phía anh, anh sẽ cố gắng để tình cảm mình dành cho em không chỉ là những điều đẹp đẽ trên trang giấy này. Anh muốn từng lời mình nói ra đều đi cùng ý thức về trách nhiệm, từng sự quan tâm đều xuất phát từ sự chân thành và từng ngày trôi qua đều là một cơ hội để anh hiểu em hơn, hiểu bản thân hơn và học cách yêu thương đúng đắn hơn.
+Anh không hứa mình sẽ không bao giờ mắc sai lầm. Nhưng anh hy vọng mình đủ trưởng thành để không trốn tránh khi có sai lầm, đủ chân thành để biết nhận lỗi và đủ trân trọng để không ngừng vun đắp những điều tốt đẹp giữa hai đứa.
+Bởi vì với anh, được yêu em là một điều đáng quý, nhưng học cách yêu em sao cho em cảm thấy được tôn trọng, được thấu hiểu và vẫn có thể là chính mình còn đáng quý hơn nhiều.
+Cuối cùng, anh muốn gửi đến em một lời chúc thật riêng.
+Chúc cô gái của anh luôn có một trái tim ấm áp nhưng không phải vì thế mà chịu đựng những điều khiến mình tổn thương. Chúc em luôn dịu dàng nhưng cũng đủ mạnh mẽ để bảo vệ những điều quan trọng với mình. Chúc em giữ được lòng tốt, nhưng biết rằng lòng tốt cũng cần đi cùng những giới hạn lành mạnh. Chúc em có thể yêu thương thật chân thành mà vẫn không quên chăm sóc bản thân, có thể tin tưởng vào những điều tốt đẹp mà vẫn đủ tỉnh táo để đưa ra những lựa chọn khiến mình bình yên.
+Chúc em có một tuổi trẻ thật đáng nhớ, có những ngày cười đến mỏi má, có những người bạn tốt, những thành tựu khiến em tự hào và những trải nghiệm giúp em trưởng thành. Chúc những giấc mơ em từng kể, những dự định em từng nghĩ đến và cả những điều em vẫn chưa đủ can đảm để bắt đầu rồi sẽ dần có cơ hội trở thành hiện thực.
+Mong em luôn có sức khỏe để làm những điều mình yêu thích, có thời gian để tận hưởng những niềm vui bình dị và có đủ bình an để không phải lúc nào cũng cảm thấy mình cần cố gắng thêm nữa mới xứng đáng được hạnh phúc.
+Và nếu có những ngày cuộc sống không dịu dàng với em, anh mong em vẫn nhớ rằng mình có quyền nghỉ ngơi, có quyền buồn một chút, có quyền bắt đầu lại và có quyền lựa chọn những điều tốt hơn cho chính mình.
+Hãy ăn uống đầy đủ, đừng thức khuya quá nhiều, đừng ôm tất cả mọi chuyện vào lòng và cũng đừng vì bận rộn với thế giới xung quanh mà quên mất cô gái nhỏ bên trong mình đang cần được chăm sóc. Khi mệt thì nghỉ ngơi, khi buồn thì cứ thành thật với cảm xúc của mình, khi vui thì hãy tận hưởng niềm vui ấy thật trọn vẹn.
+Em không cần phải lúc nào cũng mạnh mẽ đâu, bé yêu.
+Có những ngày em chỉ cần sống chậm lại, hít thở thật sâu và cho bản thân một chút thời gian. Có những chuyện chưa tìm được lời giải ngay hôm nay cũng không sao. Có những mục tiêu cần thêm thời gian để hoàn thành cũng chẳng có gì đáng xấu hổ. Cuộc sống vốn không phải một cuộc đua mà ai về đích trước sẽ là người có giá trị hơn.
+Anh mong em có thể dịu dàng với bản thân như cách em vẫn muốn người khác dịu dàng với mình. Bởi em cũng xứng đáng nhận được sự quan tâm từ chính em, xứng đáng được nghỉ ngơi sau những cố gắng và xứng đáng được tự hào về những bước tiến nhỏ bé mà mình đã làm được.
+Cảm ơn em vì đã là Ngọc Huyền.
+Cảm ơn cuộc đời vì giữa vô vàn những cuộc gặp gỡ, anh đã có cơ hội biết đến em. Anh chẳng thể biết trước tất cả những điều sẽ xảy ra trong tương lai, nhưng anh biết rằng ở hiện tại, anh thật lòng trân trọng em và trân trọng những gì chúng mình đang có.
+Anh mong một ngày nào đó, khi chúng mình cùng nhìn lại những tháng ngày này, em sẽ thấy rằng mình đã từng được yêu thương bằng sự chân thành, được tôn trọng trong những lựa chọn của mình và được khích lệ để trở thành cô gái mà em luôn mong muốn.
+Anh mong em nhớ đến anh không chỉ qua những món quà hay những lời chúc, mà qua cảm giác bình yên khi chúng mình trò chuyện, qua những lần anh thật lòng lắng nghe và qua những điều nhỏ bé mà cả hai đã cùng nhau xây dựng.
+Nếu sau này chúng mình có thêm nhiều kỷ niệm, anh hy vọng mình sẽ có thêm nhiều điều để biết ơn. Nếu cuộc sống mang đến những thử thách, anh hy vọng cả hai sẽ đủ bình tĩnh và chân thành để cùng nhau tìm cách vượt qua. Còn ngay lúc này, anh chỉ muốn trân trọng hiện tại, quan tâm đến em bằng những điều mình có thể làm và để thời gian chứng minh những điều mà hôm nay anh vẫn đang cố gắng diễn đạt thành lời.
+Chúc cục vàng của anh một ngày 20/10 thật xinh đẹp, thật vui vẻ và ngập tràn những điều dịu dàng.
+Mong rằng em sẽ nhận được thật nhiều lời chúc tốt đẹp, những món quà đáng yêu, những nụ cười chân thành và những khoảnh khắc khiến trái tim em cảm thấy ấm áp. Nhưng anh cũng mong sau ngày hôm nay, khi hoa đã dần phai, quà đã được cất gọn và mọi thứ trở lại nhịp sống bình thường, em vẫn nhớ rằng mình xứng đáng được trân trọng vào tất cả những ngày còn lại trong năm.
+Không chỉ ngày 20/10, không chỉ sinh nhật, không chỉ những ngày có một lý do đặc biệt để nói lời yêu thương. Mà cả những ngày em chẳng làm gì nổi bật, chẳng có thành tựu gì mới, chẳng trang điểm thật xinh hay chẳng có tâm trạng vui vẻ. Em vẫn là em, vẫn đáng quý và vẫn xứng đáng được đối xử bằng sự tử tế.
+Và anh hy vọng mình có thể góp phần khiến em cảm nhận được điều ấy, không phải bằng những lời hứa quá lớn lao, mà bằng sự chân thành được thể hiện qua từng ngày.
+Thương em vì em là chính em. Trân trọng em vì em có thế giới riêng của mình. Và yêu em bằng mong muốn được cùng em tạo nên những điều đẹp đẽ, chứ không phải bằng mong muốn thay đổi em thành một người khác.
+Mong cô gái nhỏ của anh luôn bình an, luôn có những điều để mong chờ và luôn tìm thấy lý do để yêu cuộc sống này thêm một chút mỗi ngày.
+Còn anh, anh sẽ tiếp tục học cách yêu thương em tốt hơn, học cách lắng nghe nhiều hơn và học cách để những điều mình nói hôm nay trở thành những điều em có thể cảm nhận được trong tương lai.
+Cảm ơn em vì đã xuất hiện trong câu chuyện của anh. Cảm ơn em vì những điều chúng mình đã có và cả những điều đẹp đẽ mà chúng mình vẫn đang từng bước tạo nên.
+Chúc mừng ngày 20/10, cục vàng của anh.
+Anh mong em luôn hạnh phúc, dù hạnh phúc ấy đến từ những điều lớn lao hay chỉ là một ngày bình thường với thật nhiều điều nhỏ bé đáng yêu.
+Và mong rằng trong vô vàn những điều đẹp đẽ của cuộc đời, chúng mình sẽ có thêm nhiều cơ hội để tiếp tục trở thành một phần ý nghĩa trong những tháng ngày của nhau.
+Yêu thương em, hôm nay và bằng tất cả sự chân thành mà anh đang học cách gìn giữ mỗi ngày. 💗
+Thương em nhiều lắm, cục vàng của anh.
+Your boy,
+Người luôn mong em bình an, hạnh phúc và được là chính mình. ♡`
+};
+
+/* ============ TIỆN ÍCH ============ */
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches, isSmall=()=>innerWidth<700;
+const NS="http://www.w3.org/2000/svg", wait=(f,ms)=>setTimeout(f,RM?0:ms);
+const LET=CONFIG.letter.split("\n").map(s=>s.trim()).filter(Boolean);
+const q=s=>s[0]==="@"?(LET.find(l=>l.startsWith(s.slice(1)))||s.slice(1)):s; // lấy nguyên văn từ thư
+const T=Object.assign({},CONFIG.text,{receiver:CONFIG.receiverName,receiverUp:CONFIG.receiverName.toUpperCase(),date:CONFIG.occasion,couple:CONFIG.coupleTitle,sign:CONFIG.signature});
+$$("[data-t]").forEach(e=>{if(T[e.dataset.t]!=null)e.textContent=T[e.dataset.t]});
+$$("[data-p]").forEach(e=>CONFIG.blocks[e.dataset.p].forEach(s=>{const p=document.createElement("p");p.textContent=q(s);e.append(p)}));
+$("#nA").textContent=CONFIG.senderName.toUpperCase();$("#nB").textContent=CONFIG.receiverName.toUpperCase();
+
+function flowerIcon(){let s='<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">';
+  for(let i=0;i<5;i++)s+=`<ellipse cx="24" cy="12" rx="5" ry="9" transform="rotate(${i*72} 24 23)"/>`;return s+'<circle cx="24" cy="23" r="3"/></svg>'}
+function roseSVG(){let s='<svg viewBox="0 0 200 200" aria-hidden="true">';
+  [[8,60,27,46,"#4A1735",.95,0],[6,64,22,38,"#9c3f78",.92,.35],[5,69,17,30,"#EBA1C2",.95,.7],[4,75,12,22,"#F8DDE7",.95,1.05]].forEach(([n,cy,rx,ry,f,o,d],k)=>{
+    for(let j=0;j<n;j++)s+=`<g transform="rotate(${360/n*j+k*17} 100 100)"><ellipse class="pt" style="--i:${d}s" cx="100" cy="${cy}" rx="${rx}" ry="${ry}" fill="${f}" fill-opacity="${o}" stroke="rgba(255,246,251,.35)" stroke-width=".8"/></g>`});
+  return s+'<circle cx="100" cy="100" r="6" fill="#FFF6FB" opacity=".8"/></svg>'}
+const SV='<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">';
+const ICONS={
+  petal:SV+'<path d="M32 6C48 20 48 42 32 58 16 42 16 20 32 6Z"/><path d="M32 18v34" opacity=".5"/><circle cx="50" cy="12" r="2" fill="currentColor"/></svg>',
+  star:SV+'<path d="M32 6l7 17 18 1.5-14 12 4.5 18L32 44l-15.5 10.5L21 36 7 24.5 25 23z"/><circle cx="52" cy="10" r="2" fill="currentColor"/><circle cx="10" cy="52" r="1.5" fill="currentColor"/></svg>',
+  strong:SV+'<path d="M32 60V30M32 48c-9-1-12-8-12-8 7 0 12 3 12 8M32 42c9-1 12-8 12-8-7 0-12 3-12 8"/><circle cx="32" cy="22" r="5"/><g transform="translate(32 22)"><ellipse cy="-9" rx="4" ry="6"/><ellipse cy="-9" rx="4" ry="6" transform="rotate(72)"/><ellipse cy="-9" rx="4" ry="6" transform="rotate(144)"/><ellipse cy="-9" rx="4" ry="6" transform="rotate(216)"/><ellipse cy="-9" rx="4" ry="6" transform="rotate(288)"/></g></svg>',
+  talk:SV+'<path d="M8 12h48v30H30L18 54V42H8z"/><path d="M18 22h28M18 31h16" opacity=".6"/></svg>'};
+$$(".rose").forEach(r=>r.innerHTML=roseSVG());
+$("#secBtn").innerHTML=flowerIcon();
+
+/* ============ CANVAS: sao, cánh hoa, hạt (nằm phía sau nội dung) ============ */
+const cv=$("#fx"),cx=cv.getContext("2d"),PAL=["#EBA1C2","#F8DDE7","#9D70CE","#FFF6FB","#E6CDA3"];
+let w,h,stars=[],petals=[],fxs=[],raf=0,calm=1;
+function seed(){const D=Math.min(devicePixelRatio||1,2);w=innerWidth;h=innerHeight;cv.width=w*D;cv.height=h*D;cx.setTransform(D,0,0,D,0,0);
+  const ns=isSmall()?55:120,np=RM?0:isSmall()?6:11;
+  stars=Array.from({length:ns},()=>({x:Math.random()*w,y:Math.random()*h,r:.4+Math.random()*1.3,ph:Math.random()*6,sp:.5+Math.random()}));
+  petals=Array.from({length:np},()=>({x:Math.random()*w,y:Math.random()*h,s:7+Math.random()*7,vy:.25+Math.random()*.4,vx:(Math.random()-.5)*.4,r:Math.random()*6,vr:(Math.random()-.5)*.02}));
+  if(RM)frame(0)}
+function heart(c,s){c.beginPath();c.moveTo(0,s*.25);c.bezierCurveTo(0,0,-s*.5,0,-s*.5,s*.25);c.bezierCurveTo(-s*.5,s*.5,0,s*.65,0,s*.9);c.bezierCurveTo(0,s*.65,s*.5,s*.5,s*.5,s*.25);c.bezierCurveTo(s*.5,0,0,0,0,s*.25);c.fill()}
+function drawFx(p){cx.globalAlpha=Math.max(0,Math.min(1,p.life/40))*p.a;cx.fillStyle=p.c;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);
+  if(p.t==="h")heart(cx,p.s);
+  else if(p.t==="p"){cx.beginPath();cx.ellipse(0,0,p.s*.5,p.s*.28,0,0,7);cx.fill()}
+  else if(p.t==="s"){const k=p.s*.6;cx.beginPath();cx.moveTo(0,-k);cx.quadraticCurveTo(0,0,k,0);cx.quadraticCurveTo(0,0,0,k);cx.quadraticCurveTo(0,0,-k,0);cx.quadraticCurveTo(0,0,0,-k);cx.fill()}
+  else{cx.beginPath();cx.arc(0,0,p.s*.25,0,7);cx.fill()}cx.restore()}
+function frame(t){cx.clearRect(0,0,w,h);cx.fillStyle="#FFF6FB";
+  for(const s of stars){cx.globalAlpha=(.2+.55*Math.abs(Math.sin(t/1800*s.sp+s.ph)))*calm;cx.beginPath();cx.arc(s.x,s.y,s.r,0,7);cx.fill()}
+  cx.fillStyle="#EBA1C2";
+  for(const p of petals){p.y+=p.vy*calm;p.x+=p.vx+Math.sin(p.y/60)*.2;p.r+=p.vr;if(p.y>h+20){p.y=-20;p.x=Math.random()*w}
+    cx.globalAlpha=.4*calm;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.beginPath();cx.ellipse(0,0,p.s*.5,p.s*.28,0,0,7);cx.fill();cx.restore()}
+  for(let i=fxs.length-1;i>=0;i--){const p=fxs[i];
+    if(p.g){p.x+=(p.g[0]-p.x)*.07;p.y+=(p.g[1]-p.y)*.07}else{p.vx*=.985;p.vy=p.vy*.985+p.gr;p.x+=p.vx;p.y+=p.vy}
+    p.r+=p.vr;if(--p.life<=0){fxs.splice(i,1);continue}drawFx(p)}
+  cx.globalAlpha=1}
+function loop(t){raf=requestAnimationFrame(loop);frame(t)}
+function startLoop(){cancelAnimationFrame(raf);if(!RM&&!document.hidden)raf=requestAnimationFrame(loop)}
+document.addEventListener("visibilitychange",startLoop);
+let rz;addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(seed,200)});
+function burst(x,y,n,o={}){if(RM)return;n=Math.round(n*(isSmall()?.6:1));
+  for(let i=0;i<n;i++){const L=i%3,a=Math.random()*6.283,v=(1.5+Math.random()*5)*(L?1:.5)*(o.soft?.5:1);
+    fxs.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-1,gr:.03+L*.01,r:Math.random()*6,vr:(Math.random()-.5)*.1,t:o.petals?"p":"hpsd"[Math.random()*4|0],
+      s:(L==0?6:L==1?12:20)*(.7+Math.random()*.6),c:PAL[Math.random()*PAL.length|0],a:L==0?.6:.95,life:80+Math.random()*90|0})}
+  if(fxs.length>450)fxs.splice(0,fxs.length-450)}
+function gatherHeart(x,y){if(RM)return;
+  for(let i=0;i<26;i++){const a=i/26*6.283,d=90+Math.random()*60;fxs.push({x:x+Math.cos(a)*d,y:y+Math.sin(a)*d,g:[x,y],r:0,vr:0,t:"d",s:14,c:PAL[i%5],a:1,life:70})}
+  setTimeout(()=>fxs.push({x,y,vx:0,vy:-.3,gr:0,r:0,vr:0,t:"h",s:46,c:"#EBA1C2",a:1,life:90}),900)}
+const center=e=>{const b=e.getBoundingClientRect();return[b.left+b.width/2,b.top+b.height/2]};
+
+/* ============ NHẠC (tùy chọn, lỗi thì bỏ qua) ============ */
+const audio=new Audio(),vol=$("#vol"),mBtn=$("#mBtn");let duck=1,fadeT,musicOK=true;
+audio.loop=true;audio.preload="none";audio.src=CONFIG.musicSrc;
+audio.addEventListener("error",()=>{musicOK=false;$("#player").classList.add("off");mBtn.setAttribute("aria-pressed","false")});
+audio.addEventListener("play",()=>{mBtn.textContent="❚❚";mBtn.setAttribute("aria-pressed","true")});
+audio.addEventListener("pause",()=>{mBtn.textContent="♪";mBtn.setAttribute("aria-pressed","false")});
+function target(){return Math.min(1,vol.value*duck)}
+function fadeTo(v){clearInterval(fadeT);fadeT=setInterval(()=>{const d=v-audio.volume;if(Math.abs(d)<.03){audio.volume=v;clearInterval(fadeT)}else audio.volume=Math.min(1,Math.max(0,audio.volume+Math.sign(d)*.03))},100)}
+function playMusic(){if(!musicOK)return;audio.volume=0;const p=audio.play();if(p&&p.then)p.then(()=>fadeTo(target())).catch(()=>{})}
+mBtn.onclick=()=>{if(audio.paused)playMusic();else audio.pause()};
+vol.oninput=()=>{clearInterval(fadeT);audio.volume=target()};
+
+/* ============ MỞ QUÀ ============ */
+let opened=false;
+function openGift(){if(opened)return;opened=true;$("#env").classList.add("open");const[x,y]=center($("#env"));burst(x,y-40,45,{petals:true});playMusic();
+  wait(()=>{$("#intro").classList.add("gone");$("#main").hidden=false;scrollTo(0,0);setTimeout(()=>{if(opened)$("#intro").hidden=true},1300)},1600)}
+$("#openBtn").onclick=openGift;
+wait(()=>$("#roseIntro").classList.add("open"),1200);
+
+/* ============ HIỆN DẦN KHI CUỘN / TIẾN TRÌNH CHƯƠNG ============ */
+const rvIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");rvIO.unobserve(e.target)}}),{threshold:.15});
+function observeAll(){$$(".rv:not(.in)").forEach(e=>rvIO.observe(e))}
+const chs=$$("#main .ch");
+chs.forEach(s=>{const a=document.createElement("a");a.href="#"+s.id;a.title=s.dataset.ch;a.setAttribute("aria-label",s.dataset.ch);$("#dots").append(a)});
+// dùng "vạch giữa màn hình" để chương rất dài (lá thư) vẫn được nhận diện
+const chIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){$$("#dots a").forEach((a,i)=>a.classList.toggle("on",chs[i]===e.target));
+  const fin=e.target.id==="ch9";calm=fin?.45:1;duck=fin?.6:1;if(!audio.paused)fadeTo(target())}}),{rootMargin:"-45% 0px -45% 0px"});
+chs.forEach(s=>chIO.observe(s));
+addEventListener("scroll",()=>{const m=document.documentElement;$("#bar").style.width=(scrollY/Math.max(1,m.scrollHeight-innerHeight)*100)+"%"},{passive:true});
+
+/* ============ LÁ THƯ (nguyên văn; mỗi đoạn hiện khi cuộn tới) ============ */
+let letterDone=false;
+const letterIO=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add("in");letterIO.unobserve(e.target);
+  if(e.target===$("#letterBody").lastElementChild)finishLetter()}),{rootMargin:"0px 0px -12% 0px"});
+function buildLetter(){const b=$("#letterBody");letterIO.disconnect();b.innerHTML="";
+  LET.forEach((s,i)=>{const p=document.createElement("p");p.textContent=s;
+    if(i===0)p.className="tag";else if(s.startsWith("Dear "))p.className="gr";else if(i>=LET.length-3)p.className="fin";
+    b.append(p);letterIO.observe(p)});
+  letterDone=false;$("#paper").classList.remove("done")}
+function finishLetter(){if(letterDone)return;letterDone=true;$("#paper").classList.add("done")}
+function skipLetter(){letterIO.disconnect();$$("#letterBody p").forEach(p=>p.classList.add("in"));finishLetter()}
+$("#skipLetter").onclick=skipLetter;
+
+/* ============ KHU VƯỜN & HOA ============ */
+$("#gardenBtn").onclick=function(){const r=$(".rose",this),on=!r.classList.contains("open");r.classList.toggle("open",on);this.setAttribute("aria-expanded",on);
+  $("#wish").classList.toggle("in",on);if(on){const[x,y]=center(this);burst(x,y,26,{petals:true,soft:true})}};
+function media(p,eager){const d=document.createElement("div");d.className="media";const im=new Image();im.alt=p.alt||p.caption||"";if(!eager)im.loading="lazy";
+  im.onerror=()=>{d.innerHTML=`<div class="phold">${flowerIcon()}<span>${T.phText}</span></div>`};im.src=p.src;d.append(im);return d}
+(function(){const f=$("#bqFrame"),m=media({src:CONFIG.flowersSrc,alt:"Hoa dành tặng "+CONFIG.receiverName});
+  m.querySelector("img").onerror=()=>{m.innerHTML='<div class="rose open"></div>';$(".rose",m).innerHTML=roseSVG()};f.append(m)})();
+
+/* ============ ALBUM + LIGHTBOX (số ảnh lấy từ CONFIG.photos) ============ */
+const lb=$("#lb");let li=0,lbFrom=null;const NP=CONFIG.photos.length;
+CONFIG.photos.forEach((p,i)=>{const b=document.createElement("button");b.className="ph f"+(i%5)+" rv";b.setAttribute("aria-label","Xem ảnh lớn: "+p.caption);
+  const c=document.createElement("span");c.className="cap";c.textContent=p.caption;b.append(media(p),c);b.onclick=()=>openLB(i);$("#gal").append(b);
+  $("#lbDots").append(document.createElement("i"))});
+function showLB(){const p=CONFIG.photos[li],box=$("#lbImg");box.replaceChildren(media(p,true));box.style.animation="none";void box.offsetWidth;box.style.animation="";
+  $("#lbCap").textContent=p.caption;$$("#lbDots i").forEach((d,i)=>d.classList.toggle("on",i===li))}
+function openLB(i){li=i;lbFrom=document.activeElement;lb.hidden=false;document.body.classList.add("noscroll");showLB();$("#lbClose").focus()}
+function closeLB(){lb.hidden=true;document.body.classList.remove("noscroll");if(lbFrom)lbFrom.focus()}
+function stepLB(d){li=(li+d+NP)%NP;showLB()}
+$("#lbClose").onclick=closeLB;$("#lbPrev").onclick=()=>stepLB(-1);$("#lbNext").onclick=()=>stepLB(1);
+lb.addEventListener("click",e=>{if(e.target===lb)closeLB()});
+addEventListener("keydown",e=>{if(lb.hidden)return;if(e.key==="Escape")closeLB();else if(e.key==="ArrowLeft")stepLB(-1);else if(e.key==="ArrowRight")stepLB(1)});
+let tx=0;lb.addEventListener("touchstart",e=>{tx=e.changedTouches[0].clientX},{passive:true});
+lb.addEventListener("touchend",e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)stepLB(d<0?1:-1)},{passive:true});
+
+/* ============ NHỮNG ĐIỀU ANH MUỐN EM NHỚ (trích nguyên văn từ thư) ============ */
+CONFIG.things.forEach((t,i)=>{const d=document.createElement("article");d.className="thing rv";
+  d.innerHTML=`<div class="vis"><div class="num">0${i+1}</div>${ICONS[t.icon]}</div><div><h3></h3><p></p></div>`;$("h3",d).textContent=t.title;$("p",d).textContent=q(t.text);$("#things").append(d)});
+
+/* ============ CHÒM SAO ============ */
+(function(){const g=$("#cpts"),pts=[];
+  for(let i=0;i<36;i++){const t=i/36*6.2832,x=200+3.6*16*Math.pow(Math.sin(t),3),y=118-3.6*(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));pts.push([x,y]);
+    const c=document.createElementNS(NS,"circle");c.setAttribute("cx",x.toFixed(1));c.setAttribute("cy",y.toFixed(1));c.setAttribute("r",i%4?2:3);
+    c.style.setProperty("--dx",(Math.random()*320-160).toFixed(0)+"px");c.style.setProperty("--dy",(Math.random()*240-120).toFixed(0)+"px");g.append(c)}
+  const l=document.createElementNS(NS,"path");l.setAttribute("class","cl");l.setAttribute("d","M"+pts.map(p=>p.map(n=>n.toFixed(1)).join(" ")).join("L")+"Z");g.parentNode.insertBefore(l,g)})();
+$("#heartBtn").onclick=function(){const on=!$("#const").classList.contains("on");$("#const").classList.toggle("on",on);$("#cpts").classList.toggle("on",on);$("#cMsg").classList.toggle("in",on);
+  if(on){const[x,y]=center(this);burst(x,y,22,{soft:true})}};
+
+/* ============ THƯ "MỞ KHI CẦN ĐƯỢC VỖ VỀ" ============ */
+$("#hugEnv").onclick=function(){const L=$("#hugLetter"),open=L.hidden;L.hidden=!open;$("#hugGot").hidden=!open;this.setAttribute("aria-expanded",open);
+  if(open)L.scrollIntoView({behavior:RM?"auto":"smooth",block:"center"})};
+$("#hugGot").onclick=function(){const[x,y]=center(this);gatherHeart(x,y)};
+
+/* ============ VƯỜN BÍ MẬT (EASTER EGG) ============ */
+let secLock=false,piano=null;
+$("#secBtn").onclick=function(){$("#secMsg").classList.add("open");if(secLock)return;secLock=true;setTimeout(()=>secLock=false,2500);
+  if(!RM)for(let i=0;i<8;i++){const n=document.createElement("span");n.className="note";n.textContent="♪♫♩♬"[i%4];n.style.top=(15+Math.random()*65)+"vh";n.style.animationDelay=(i*.3)+"s";n.setAttribute("aria-hidden","true");
+    n.addEventListener("animationend",()=>n.remove());document.body.append(n)}
+  try{if(piano){piano.pause();piano.currentTime=0}piano=new Audio(CONFIG.pianoSrc);piano.volume=.6;const p=piano.play();if(p&&p.catch)p.catch(()=>{})}catch(e){}};
+
+/* ============ CÁI ÔM CUỐI ============ */
+let hugged=false,hugLock=false,hugT=[];
+function doHug(){if(hugLock)return;hugLock=true;setTimeout(()=>hugLock=false,700);
+  const btn=$("#hug"),[x,y]=center(hugged?$("#hug2"):btn);
+  if(hugged){burst(x,y,90);return}
+  hugged=true;const dim=$("#dim");dim.classList.add("on");
+  const at=(f,ms)=>hugT.push(wait(f,ms)),ms=$$("#after .msg");
+  at(()=>{dim.classList.remove("on");burst(x,y,40,{soft:true})},500);       // giai đoạn 1: tĩnh lặng
+  at(()=>{[0,1,2].forEach(k=>burst(x,y,70))},900);                          // giai đoạn 2: supernova nhiều lớp
+  $("#after").hidden=false;at(()=>$("#after").scrollIntoView({behavior:RM?"auto":"smooth",block:"center"}),400);
+  [0,1,2,3,4].forEach((k,i)=>at(()=>ms[k].classList.add("in"),1000+i*1500));  // giai đoạn 3: lời nhắn
+  at(()=>{$("#roseFinal").classList.add("open");ms[5].classList.add("in");burst(innerWidth/2,0,30,{petals:true})},8000); // giai đoạn 4: hoa cuối
+  at(()=>ms[6].classList.add("in"),9500)}
+$("#hug").onclick=doHug;$("#hug2").onclick=doHug;
+$("#replay").onclick=function(){
+  hugT.forEach(clearTimeout);hugT=[];hugged=false;fxs=[];calm=1;duck=1;if(piano)piano.pause();
+  $("#after").hidden=true;$$("#after .in").forEach(e=>e.classList.remove("in"));
+  $$(".open,.on,.in").forEach(e=>{if(!e.closest("#intro")&&e.id!=="player")e.classList.remove("open","on","in")});
+  $("#hugLetter").hidden=true;$("#hugGot").hidden=true;$("#hugEnv").setAttribute("aria-expanded","false");$("#gardenBtn").setAttribute("aria-expanded","false");
+  buildLetter();$("#env").classList.remove("open");$("#roseIntro").classList.remove("open");
+  $("#main").hidden=true;$("#intro").hidden=false;void $("#intro").offsetWidth;$("#intro").classList.remove("gone");opened=false;scrollTo(0,0);
+  wait(()=>$("#roseIntro").classList.add("open"),800)};
+
+/* ============ KHỞI ĐỘNG ============ */
+buildLetter();seed();startLoop();
+new MutationObserver(observeAll).observe($("#main"),{attributes:true,attributeFilter:["hidden"]});observeAll();
+</script>
+</body>
+</html>
